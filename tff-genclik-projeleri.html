@@ -1782,9 +1782,126 @@
     text-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
   }
 
+  /* ── MOBILE RESTRICTION OVERLAY ── */
+  #mobile-restriction-overlay {
+    display: none;
+  }
+
+  @media (max-width: 1023px) {
+    #mobile-restriction-overlay {
+      display: flex;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #060a10;
+      background-image: 
+        radial-gradient(circle at top right, rgba(0, 240, 255, 0.1) 0%, transparent 60%),
+        radial-gradient(circle at bottom left, rgba(255, 0, 110, 0.05) 0%, transparent 60%);
+      z-index: 9999999;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      color: #fff;
+      text-align: center;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .restriction-box {
+      max-width: 480px;
+      background: rgba(13, 17, 23, 0.6);
+      border: 1px solid rgba(0, 240, 255, 0.15);
+      border-radius: 12px;
+      padding: 45px 30px;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      transform: translateY(0);
+      animation: restrictionBoxEntrance 600ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+
+    .restriction-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 15px rgba(0, 240, 255, 0.4));
+      animation: restrictionFloat 3s ease-in-out infinite;
+    }
+
+    .restriction-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 4px;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .restriction-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(32px, 8vw, 42px);
+      line-height: 1.1;
+      color: #00F0FF;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+      text-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+    }
+
+    .restriction-text {
+      font-size: 14px;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 28px;
+      font-weight: 300;
+    }
+
+    .restriction-text strong {
+      color: #00F0FF;
+      font-weight: 600;
+    }
+
+    .restriction-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 18px;
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      border-radius: 20px;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: #00F0FF;
+      letter-spacing: 1px;
+    }
+
+    @keyframes restrictionBoxEntrance {
+      from { opacity: 0; transform: translateY(30px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes restrictionFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-8px) scale(1.05); }
+    }
+  }
+
 </style>
 </head>
 <body>
+
+<!-- MOBILE DEVICE RESTRICTION OVERLAY -->
+<div id="mobile-restriction-overlay">
+  <div class="restriction-box">
+    <div class="restriction-icon">🖥️</div>
+    <div class="restriction-label">SUNUM MODU AKTİF</div>
+    <h2 class="restriction-title">MASAÜSTÜ EKRANI GEREKLİ</h2>
+    <p class="restriction-text">
+      Bu web sitesi, yüksek detaylı interaktif sunumlar ve özel yatay animasyonlar barındırmaktadır. 
+      En iyi deneyim için lütfen bu sayfayı bir <strong>masaüstü veya laptop</strong> bilgisayar ekranından görüntüleyiniz.
+    </p>
+    <div class="restriction-badge">
+      Ekran Genişliğiniz: &nbsp;<span id="current-screen-width">---</span>px
+    </div>
+  </div>
+</div>
 
 <!-- NAV -->
 <nav id="nav">
@@ -2599,6 +2716,19 @@
   sourceEl.addEventListener('click', (e) => {
     e.stopPropagation();
   });
+})();
+</script>
+
+<script>
+(function() {
+  function updateRestrictionWidth() {
+    const widthSpan = document.getElementById('current-screen-width');
+    if (widthSpan) {
+      widthSpan.textContent = window.innerWidth;
+    }
+  }
+  window.addEventListener('resize', updateRestrictionWidth);
+  window.addEventListener('DOMContentLoaded', updateRestrictionWidth);
 })();
 </script>
 
